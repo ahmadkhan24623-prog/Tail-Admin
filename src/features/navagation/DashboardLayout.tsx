@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Header } from './navbar/Header';
 import { Logo } from './navbar/Logo';
@@ -11,8 +11,16 @@ import {
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
-  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+  
+  const [isDashboardOpen, setIsDashboardOpen] = useState(() => {
+    return localStorage.getItem('isDashboardOpen') === 'true';
+  });
+
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    localStorage.setItem('isDashboardOpen', String(isDashboardOpen));
+  }, [isDashboardOpen]);
 
   const isDashboardActive = ['/ecommerce', '/analytics', '/marketing', '/crm', '/stocks', '/saas', '/logistics', '/ai', '/sales', '/finance'].includes(pathname);
 
@@ -37,6 +45,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 </SidebarItem>
               </div>
 
+              {/* Child Routes*/}
               {isDashboardOpen && sidebarExpanded && (
                 <div className="space-y-1 mt-1">
                   <NavLink to="/ecommerce" className={navClass}>Ecommerce</NavLink>
@@ -64,7 +73,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          {/* SUPPORT SECTION */}
+          {/* Support and Others sections... */}
           <div>
             {sidebarExpanded && <h3 className="mb-2 ml-4 text-xs font-semibold text-gray-400 uppercase">Support</h3>}
             <NavLink to="/chat" className={({isActive}) => isActive ? "bg-blue-50 block rounded-lg" : ""}><SidebarItem icon={<MessageSquare size={20} />} label="Chat" expanded={sidebarExpanded} /></NavLink>
@@ -72,7 +81,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <NavLink to="/email" className={({isActive}) => isActive ? "bg-blue-50 block rounded-lg" : ""}><SidebarItem icon={<Mail size={20} />} label="Email" expanded={sidebarExpanded} /></NavLink>
           </div>
 
-          {/* OTHERS SECTION */}
           <div>
             {sidebarExpanded && <h3 className="mb-2 ml-4 text-xs font-semibold text-gray-400 uppercase">Others</h3>}
             <NavLink to="/charts" className={({isActive}) => isActive ? "bg-blue-50 block rounded-lg" : ""}><SidebarItem icon={<PieChart size={20} />} label="Charts" expanded={sidebarExpanded} /></NavLink>
@@ -81,7 +89,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
 
-        {/* PURCHASE CARD */}
         {sidebarExpanded && (
           <div className="mx-4 mt-auto mb-6 rounded-xl bg-gray-50 p-4 text-center border border-gray-100">
             <h4 className="mb-1 text-sm font-bold text-gray-800">#1 Tailwind CSS Dashboard</h4>
