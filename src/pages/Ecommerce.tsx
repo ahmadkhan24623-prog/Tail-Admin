@@ -1,4 +1,4 @@
-import { Tag, Package, ArrowUp, ArrowDown, MoreVertical } from 'lucide-react';
+import { Tag, Package, ArrowUp, ArrowDown, MoreVertical, Filter } from 'lucide-react';
 import { 
   BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
@@ -18,13 +18,13 @@ export default function Ecommerce() {
   return (
     <div className="p-4 md:p-6 space-y-6">
       {/* 1. TOP STAT ROW */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard title="Active Products" value="714" trend="+6.45%" icon={<Tag size={24} className="text-blue-500" />} />
         <StatCard title="Categories" value="31" trend="-2.11%" icon={<Package size={24} className="text-blue-500" />} isNegative />
       </div>
 
       {/* 2. MIDDLE SECTION */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3  gap-6">
         <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-bold text-gray-800 mb-6">Monthly Transactions</h3>
           <div className="h-64">
@@ -96,6 +96,72 @@ export default function Ecommerce() {
               <Area type="monotone" dataKey="revenue" stroke="#93c5fd" strokeWidth={2} fill="transparent" />
             </AreaChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* 4. CUSTOMERS & RECENT ORDERS SECTION */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-1 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">Customers Demographic</h3>
+              <p className="text-sm text-gray-400">Number of customer based on country</p>
+            </div>
+            <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
+          </div>
+          <div className="bg-gray-50 rounded-xl h-48 mb-6 flex items-center justify-center border border-dashed">
+            <span className="text-gray-400 text-sm">Map Placeholder</span>
+          </div>
+          <div className="space-y-4">
+            {[ 
+                { img: '/images/USA.svg', name: 'USA', count: '2,379', percent: 79 }, 
+                { img: '/images/France.svg', name: 'France', count: '589', percent: 23 } 
+            ].map((item) => (
+              <div key={item.name} className="flex items-center gap-4">
+                <img src={item.img} alt={item.name} className="w-8 h-8 rounded-full object-cover" />
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-gray-800">{item.name}</p>
+                  <p className="text-xs text-gray-400">{item.count} Customers</p>
+                </div>
+                <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${item.percent}%` }}></div>
+                </div>
+                <span className="text-sm font-bold text-gray-800 w-8 text-right">{item.percent}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="xl:col-span-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-bold text-gray-800">Recent Orders</h3>
+            <div className="flex gap-2">
+              <button className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"><Filter size={16} /> Filter</button>
+              <button className="px-4 py-2 border rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">See all</button>
+            </div>
+          </div>
+          <div className="space-y-6">
+            {[
+              { name: 'MacBook Pro 13”', v: '2 Variants', p: '$2399.00', cat: 'Laptop', st: 'Delivered', col: 'text-green-600 bg-green-50', img: '/images/MacBook.jpg' },
+              { name: 'Apple Watch Ultra', v: '1 Variant', p: '$879.00', cat: 'Watch', st: 'Pending', col: 'text-orange-600 bg-orange-50', img: '/images/Apple Watch.jpg' },
+              { name: 'iPhone 15 Pro Max', v: '2 Variants', p: '$1869.00', cat: 'SmartPhone', st: 'Delivered', col: 'text-green-600 bg-green-50', img: '/images/Ihone 13.jpg' },
+              { name: 'iPad Pro 3rd Gen', v: '2 Variants', p: '$1699.00', cat: 'Electronics', st: 'Canceled', col: 'text-red-600 bg-red-50', img: '/images/ipad pro3rd gen.jpg' },
+              { name: 'AirPods Pro 2nd Gen', v: '1 Variant', p: '$240.00', cat: 'Accessories', st: 'Delivered', col: 'text-green-600 bg-green-50', img: '/images/AirPoda Pro 2ND gEN.jpg' },
+            ].map((o, i) => (
+              <div key={i} className="grid grid-cols-4 items-center text-sm">
+                <div className="flex items-center gap-3">
+                    <img src={o.img} alt={o.name} className="w-10 h-10 object-cover rounded-lg bg-gray-100" />
+                    <div>
+                        <p className="font-bold text-gray-800">{o.name}</p>
+                        <p className="text-xs text-gray-400">{o.v}</p>
+                    </div>
+                </div>
+                <p className="text-gray-600">{o.cat}</p>
+                <p className="font-semibold text-gray-800">{o.p}</p>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold w-fit ${o.col}`}>{o.st}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
