@@ -21,6 +21,8 @@ export default function Ecommerce() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard title="Active Products" value="714" trend="+6.45%" icon={<Tag size={24} className="text-blue-500" />} />
         <StatCard title="Categories" value="31" trend="-2.11%" icon={<Package size={24} className="text-blue-500" />} isNegative />
+        <StatCard title="Sale" value="78" trend="+10.11%" icon={<Package size={24} className="text-blue-500" />} />
+
       </div>
 
       {/* 2. MIDDLE SECTION */}
@@ -48,7 +50,7 @@ export default function Ecommerce() {
             </div>
             <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
           </div>
-          <div className="relative flex justify-center py-4">
+          <div className="relative flex justify-center py-4 ">
             <svg className="w-full max-w-[200px] h-auto mb-12" viewBox="0 0 200 100">
               <path d="M 20 100 A 90 90 0 0 1 180 100" fill="none" stroke="#f3f4f6" strokeWidth="15" strokeLinecap="round" />
               <path d="M 20 100 A 90 90 0 0 1 180 100" fill="none" stroke="#3b82f6" strokeWidth="15" strokeLinecap="round" 

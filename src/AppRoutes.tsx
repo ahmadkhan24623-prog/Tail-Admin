@@ -1,4 +1,3 @@
-// src/AppRoutes.tsx
 import { Routes, Route } from 'react-router-dom';
 import Ecommerce from './pages/Ecommerce'; 
 
@@ -7,8 +6,10 @@ const Placeholder = ({ title }: { title: string }) => <h1 className="text-2xl fo
 export const AppRoutes = () => {
  return (
     <Routes>
-      <Route path="/" element={<Placeholder title="Dashboard Home" />} />
+      <Route path="/" element={<Ecommerce />} /> 
+      
       <Route path="/ecommerce" element={<Ecommerce />} /> 
+      
       <Route path="/analytics" element={<Placeholder title="Analytics Page" />} />
     </Routes>
   ); 
