@@ -1,7 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import Ecommerce from './pages/Ecommerce'; 
-
-const Placeholder = ({ title }: { title: string }) => <h1 className="text-2xl font-bold">{title}</h1>;
+import Analytics from './pages/Analytics';
+import Marketing from './pages/Marketing';
+import Stock from './pages/Stock';
 
 export const AppRoutes = () => {
  return (
@@ -10,7 +11,11 @@ export const AppRoutes = () => {
       
       <Route path="/ecommerce" element={<Ecommerce />} /> 
       
-      <Route path="/analytics" element={<Placeholder title="Analytics Page" />} />
+      <Route path="/analytics" element={<Analytics />} />
+
+      <Route path="/marketing" element={<Marketing />} />
+
+      <Route path="/stocks" element={<Stock />} />
     </Routes>
   ); 
 };

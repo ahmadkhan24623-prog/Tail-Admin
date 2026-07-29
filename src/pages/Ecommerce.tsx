@@ -1,9 +1,34 @@
+import { useState } from 'react';
 import { Tag, Package, ArrowUp, ArrowDown, MoreVertical, Filter } from 'lucide-react';
 import { 
   BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
 
-const data = [
+// Data sets for Monthly, Quarterly, and Annually views
+const chartDataSets: Record<string, { name: string; sales: number; revenue: number }[]> = {
+  Monthly: [
+    { name: 'Jan', sales: 40, revenue: 20 }, { name: 'Feb', sales: 90, revenue: 50 },
+    { name: 'Mar', sales: 50, revenue: 30 }, { name: 'Apr', sales: 70, revenue: 45 },
+    { name: 'May', sales: 40, revenue: 25 }, { name: 'Jun', sales: 80, revenue: 60 },
+    { name: 'Jul', sales: 50, revenue: 35 }, { name: 'Aug', sales: 40, revenue: 30 },
+    { name: 'Sep', sales: 60, revenue: 40 }, { name: 'Oct', sales: 90, revenue: 70 },
+    { name: 'Nov', sales: 70, revenue: 50 }, { name: 'Dec', sales: 30, revenue: 20 },
+  ],
+  Quarterly: [
+    { name: 'Q1', sales: 180, revenue: 100 },
+    { name: 'Q2', sales: 160, revenue: 130 },
+    { name: 'Q3', sales: 150, revenue: 105 },
+    { name: 'Q4', sales: 190, revenue: 140 },
+  ],
+  Annually: [
+    { name: '2023', sales: 650, revenue: 480 },
+    { name: '2024', sales: 720, revenue: 540 },
+    { name: '2025', sales: 850, revenue: 670 },
+    { name: '2026', sales: 680, revenue: 510 },
+  ],
+};
+
+const transactionsData = [
   { name: 'Jan', sales: 40, revenue: 20 }, { name: 'Feb', sales: 90, revenue: 50 },
   { name: 'Mar', sales: 50, revenue: 30 }, { name: 'Apr', sales: 70, revenue: 45 },
   { name: 'May', sales: 40, revenue: 25 }, { name: 'Jun', sales: 80, revenue: 60 },
@@ -13,6 +38,7 @@ const data = [
 ];
 
 export default function Ecommerce() {
+  const [activeTab, setActiveTab] = useState<'Monthly' | 'Quarterly' | 'Annually'>('Monthly');
   const percentage = 75.55;
 
   return (
@@ -21,8 +47,7 @@ export default function Ecommerce() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard title="Active Products" value="714" trend="+6.45%" icon={<Tag size={24} className="text-blue-500" />} />
         <StatCard title="Categories" value="31" trend="-2.11%" icon={<Package size={24} className="text-blue-500" />} isNegative />
-        <StatCard title="Sale" value="78" trend="+10.11%" icon={<Package size={24} className="text-blue-500" />} />
-
+        <StatCard title="Sale" value="78" trend="+10.11%" icon={<Tag size={24} className="text-blue-500" />} />
       </div>
 
       {/* 2. MIDDLE SECTION */}
@@ -31,7 +56,7 @@ export default function Ecommerce() {
           <h3 className="text-lg font-bold text-gray-800 mb-6">Monthly Transactions</h3>
           <div className="h-64 w-full ">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data}>
+              <BarChart data={transactionsData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9ca3af'}} />
                 <YAxis axisLine={false} tickLine={false} tick={{fill: '#9ca3af'}} />
@@ -69,13 +94,21 @@ export default function Ecommerce() {
         </div>
       </div>
 
-      {/* 3. TREND CHART SECTION */}
+      {/* 3. TREND CHART SECTION (FULLY FUNCTIONAL TABS) */}
       <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-bold text-gray-800">Sales vs Revenue</h3>
           <div className="flex gap-2">
-            {['Monthly', 'Quarterly', 'Annually'].map((tab) => (
-              <button key={tab} className="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100">
+            {(['Monthly', 'Quarterly', 'Annually'] as const).map((tab) => (
+              <button 
+                key={tab} 
+                onClick={() => setActiveTab(tab)}
+                className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors ${
+                  activeTab === tab 
+                    ? 'bg-blue-600 text-white' 
+                    : 'text-gray-600 bg-gray-50 hover:bg-gray-100'
+                }`}
+              >
                 {tab}
               </button>
             ))}
@@ -83,7 +116,7 @@ export default function Ecommerce() {
         </div>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data}>
+            <AreaChart data={chartDataSets[activeTab]}>
               <defs>
                 <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
@@ -170,7 +203,15 @@ export default function Ecommerce() {
   );
 }
 
-function StatCard({ title, value, trend, icon, isNegative }: any) {
+interface StatCardProps {
+  title: string;
+  value: string;
+  trend: string;
+  icon: React.ReactNode;
+  isNegative?: boolean;
+}
+
+function StatCard({ title, value, trend, icon, isNegative }: StatCardProps) {
   return (
     <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
       <div>
