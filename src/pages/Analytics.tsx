@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Users, TrendingUp, Clock, ArrowUp, ArrowDown, MoreVertical, Globe, Smartphone, Monitor } from 'lucide-react';
-import { 
+import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts';
+import { useTheme } from '../context/ThemeContext';
 
 // Data sets for different timeframe filters
 const analyticsDataSets: Record<string, { name: string; visitors: number; pageViews: number }[]> = {
@@ -47,6 +48,10 @@ const deviceData = [
 export default function Analytics() {
   const [timeframe, setTimeframe] = useState<'7D' | '30D' | '12M'>('30D');
   const [animateBars, setAnimateBars] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
+  const tickFill = isDark ? '#6b7280' : '#9ca3af';
 
   // Trigger left-to-right bar animation on page load/reload
   useEffect(() => {
@@ -89,21 +94,21 @@ export default function Analytics() {
       </div>
 
       {/* 2. MAIN TRAFFIC OVERVIEW CHART */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div>
-            <h3 className="text-lg font-bold text-gray-800">Website Traffic Overview</h3>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Website Traffic Overview</h3>
             <p className="text-sm text-gray-400">Monitor unique visitors vs total page views</p>
           </div>
-          <div className="flex gap-2 bg-gray-50 p-1 rounded-xl border border-gray-100">
+          <div className="flex gap-2 bg-gray-50 dark:bg-gray-800 p-1 rounded-xl border border-gray-100 dark:border-gray-700">
             {(['7D', '30D', '12M'] as const).map((tf) => (
-              <button 
-                key={tf} 
+              <button
+                key={tf}
                 onClick={() => setTimeframe(tf)}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  timeframe === tf 
-                    ? 'bg-blue-600 text-white shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
+                  timeframe === tf
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 {tf === '7D' ? 'Last 7 Days' : tf === '30D' ? 'Last 30 Days' : '12 Months'}
@@ -111,7 +116,7 @@ export default function Analytics() {
             ))}
           </div>
         </div>
-        
+
         <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={analyticsDataSets[timeframe]}>
@@ -125,9 +130,9 @@ export default function Analytics() {
                   <stop offset="95%" stopColor="#93c5fd" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9ca3af'}} />
-              <YAxis axisLine={false} tickLine={false} tick={{fill: '#9ca3af'}} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: tickFill}} />
+              <YAxis axisLine={false} tickLine={false} tick={{fill: tickFill}} />
               <Tooltip />
               <Area type="monotone" dataKey="pageViews" name="Page Views" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorPageViews)" />
               <Area type="monotone" dataKey="visitors" name="Unique Visitors" stroke="#93c5fd" strokeWidth={2} fillOpacity={1} fill="url(#colorVisitors)" />
@@ -140,10 +145,10 @@ export default function Analytics() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Traffic Sources */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-2 bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h3 className="text-lg font-bold text-gray-800">Top Traffic Sources</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Top Traffic Sources</h3>
               <p className="text-sm text-gray-400">Where your users are coming from</p>
             </div>
             <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
@@ -158,12 +163,12 @@ export default function Analytics() {
             ].map((item) => (
               <div key={item.source} className="space-y-1.5">
                 <div className="flex justify-between text-sm">
-                  <span className="font-semibold text-gray-700">{item.source}</span>
+                  <span className="font-semibold text-gray-700 dark:text-gray-200">{item.source}</span>
                   <span className="text-gray-400 font-medium">{item.visitors} visits ({item.percent}%)</span>
                 </div>
-                <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full ${item.color} rounded-full transition-all duration-1000 ease-out`} 
+                <div className="w-full h-2.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full ${item.color} rounded-full transition-all duration-1000 ease-out`}
                     style={{ width: animateBars ? `${item.percent}%` : '0%' }}
                   ></div>
                 </div>
@@ -171,17 +176,17 @@ export default function Analytics() {
             ))}
           </div>
 
-          <div className="border-t border-gray-100 pt-4 mt-6 flex justify-between items-center text-xs text-gray-400">
+          <div className="border-t border-gray-100 dark:border-gray-800 pt-4 mt-6 flex justify-between items-center text-xs text-gray-400">
             <span>Updated 5 minutes ago</span>
-            <button className="font-semibold text-blue-600 hover:underline">View Detailed Report →</button>
+            <button className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">View Detailed Report →</button>
           </div>
         </div>
 
         {/* Device Breakdown */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+        <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <h3 className="text-lg font-bold text-gray-800">Device Analytics</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Device Analytics</h3>
               <p className="text-sm text-gray-400">Traffic split by device type</p>
             </div>
             <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
@@ -205,22 +210,22 @@ export default function Analytics() {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute text-center pointer-events-none">
-              <span className="text-2xl font-bold text-gray-800">100%</span>
+              <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">100%</span>
             </div>
           </div>
 
-          <div className="space-y-3 pt-2 border-t border-gray-100">
+          <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-800">
             {deviceData.map((item) => {
               const IconComp = item.icon;
               return (
                 <div key={item.name} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2.5">
-                    <span className="p-1.5 rounded-lg bg-gray-50 text-gray-600 border border-gray-100">
+                    <span className="p-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-700">
                       <IconComp size={16} />
                     </span>
-                    <span className="font-medium text-gray-700">{item.name}</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">{item.name}</span>
                   </div>
-                  <span className="font-bold text-gray-800">{item.value}%</span>
+                  <span className="font-bold text-gray-800 dark:text-gray-100">{item.value}%</span>
                 </div>
               );
             })}
@@ -245,13 +250,13 @@ function AnalyticsCard({ title, value, trend, icon, isNegative, isPositiveTrend 
   const isGood = isPositiveTrend ? !isNegative : !isNegative;
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+    <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm flex items-center justify-between">
       <div>
         <p className="text-sm text-gray-400">{title}</p>
-        <h4 className="text-3xl font-bold text-gray-800 mt-1">{value}</h4>
+        <h4 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mt-1">{value}</h4>
       </div>
       <div className="text-right">
-        <div className="bg-blue-50 p-3 rounded-full mb-2">{icon}</div>
+        <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-full mb-2">{icon}</div>
         <span className={`text-xs font-bold flex items-center justify-end gap-0.5 ${isGood ? 'text-green-500' : 'text-red-500'}`}>
           {isNegative ? <ArrowDown size={12} /> : <ArrowUp size={12} />} {trend}
         </span>

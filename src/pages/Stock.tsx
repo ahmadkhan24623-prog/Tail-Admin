@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Package, ShieldAlert, ArrowUpRight, ArrowDownRight, RefreshCw, BarChart2, Layers, Cpu, Search } from 'lucide-react';
-import { 
+import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell
 } from 'recharts';
+import { useTheme } from '../context/ThemeContext';
 
 const stockTurnoverData = [
   { category: 'Processors', stock: 420, fill: '#0ea5e9' },
@@ -16,6 +17,9 @@ export default function Stock() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'low' | 'optimal'>('all');
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const tickFill = isDark ? '#94a3b8' : '#64748b';
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 120);
@@ -39,7 +43,7 @@ export default function Stock() {
   });
 
   return (
-    <div className="p-4 md:p-6 space-y-6 min-h-screen text-slate-800 font-sans">
+    <div className="p-4 md:p-6 space-y-6 min-h-screen text-slate-800 dark:text-slate-100 font-sans">
       
       {/* 1. CLEAN LIGHT HEADER */}
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-6 md:p-8 text-white shadow-lg">
@@ -67,62 +71,62 @@ export default function Stock() {
 
       {/* 2. LIGHT METRIC CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-400 transition-all group">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-blue-400 dark:hover:border-blue-700 transition-all group">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Vault Units</p>
-              <h4 className="text-2xl font-black text-slate-900 mt-1">14,820</h4>
+              <h4 className="text-2xl font-black text-slate-900 dark:text-white mt-1">14,820</h4>
             </div>
-            <div className="p-3 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 group-hover:scale-110 transition-transform">
+            <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900 group-hover:scale-110 transition-transform">
               <Layers size={20} />
             </div>
           </div>
-          <div className="mt-4 flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+          <div className="mt-4 flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
             <ArrowUpRight size={14} /> +8.4% velocity this cycle
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-amber-400 transition-all group">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-amber-400 dark:hover:border-amber-700 transition-all group">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Critical Low Warnings</p>
-              <h4 className="text-2xl font-black text-slate-900 mt-1">12 SKUs</h4>
+              <h4 className="text-2xl font-black text-slate-900 dark:text-white mt-1">12 SKUs</h4>
             </div>
-            <div className="p-3 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 group-hover:scale-110 transition-transform">
+            <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900 group-hover:scale-110 transition-transform">
               <ShieldAlert size={20} />
             </div>
           </div>
-          <div className="mt-4 flex items-center gap-1.5 text-xs text-amber-600 font-semibold">
+          <div className="mt-4 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 font-semibold">
             Action required immediately
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-rose-400 transition-all group">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-rose-400 dark:hover:border-rose-700 transition-all group">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Depleted Stockouts</p>
-              <h4 className="text-2xl font-black text-slate-900 mt-1">3 Items</h4>
+              <h4 className="text-2xl font-black text-slate-900 dark:text-white mt-1">3 Items</h4>
             </div>
-            <div className="p-3 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 group-hover:scale-110 transition-transform">
+            <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900 group-hover:scale-110 transition-transform">
               <Package size={20} />
             </div>
           </div>
-          <div className="mt-4 flex items-center gap-1.5 text-xs text-rose-600 font-semibold">
+          <div className="mt-4 flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-semibold">
             <ArrowDownRight size={14} /> Backorder queue active
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-indigo-400 transition-all group">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-indigo-400 dark:hover:border-indigo-700 transition-all group">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Sector Efficiency</p>
-              <h4 className="text-2xl font-black text-slate-900 mt-1">98.2%</h4>
+              <h4 className="text-2xl font-black text-slate-900 dark:text-white mt-1">98.2%</h4>
             </div>
-            <div className="p-3 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 group-hover:scale-110 transition-transform">
+            <div className="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900 group-hover:scale-110 transition-transform">
               <BarChart2 size={20} />
             </div>
           </div>
-          <div className="mt-4 flex items-center gap-1.5 text-xs text-indigo-600 font-semibold">
+          <div className="mt-4 flex items-center gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 font-semibold">
             Optimal routing active
           </div>
         </div>
@@ -132,20 +136,20 @@ export default function Stock() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Bar Chart */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-xs flex flex-col justify-between">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h3 className="text-base font-bold text-slate-900">Hardware Category Distribution</h3>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Hardware Category Distribution</h3>
               <p className="text-xs text-slate-400">Real-time volume load across hardware segments</p>
             </div>
-            <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold border border-blue-100">Live Telemetry</span>
+            <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-bold border border-blue-100 dark:border-blue-900">Live Telemetry</span>
           </div>
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stockTurnoverData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="category" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 11}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 11}} />
+                <XAxis dataKey="category" axisLine={false} tickLine={false} tick={{fill: tickFill, fontSize: 11}} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: tickFill, fontSize: 11}} />
                 <Tooltip 
                   cursor={{fill: 'rgba(241, 245, 249, 0.6)'}}
                   contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '1rem', color: '#fff', fontSize: '12px' }} 
@@ -161,9 +165,9 @@ export default function Stock() {
         </div>
 
         {/* Storage Zones Widget */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs flex flex-col justify-between">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
           <div>
-            <h3 className="text-base font-bold text-slate-900 mb-1">Sector Node Capacity</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Sector Node Capacity</h3>
             <p className="text-xs text-slate-400">Storage facility utilization limits</p>
           </div>
 
@@ -173,19 +177,19 @@ export default function Stock() {
               { zone: 'Sector Beta (Memory & RAM)', load: '92%', color: 'bg-indigo-500' },
               { zone: 'Sector Gamma (Peripherals)', load: '54%', color: 'bg-emerald-500' },
             ].map((node, idx) => (
-              <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 space-y-2">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-bold text-slate-700">{node.zone}</span>
-                  <span className="font-mono font-bold text-slate-900">{node.load}</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-200">{node.zone}</span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white">{node.load}</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                   <div className={`h-full ${node.color} rounded-full transition-all duration-1000`} style={{ width: node.load }}></div>
                 </div>
               </div>
             ))}
           </div>
 
-          <button className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-200 cursor-pointer">
+          <button className="w-full py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 cursor-pointer">
             Rebalance Sector Loads →
           </button>
         </div>
@@ -193,31 +197,31 @@ export default function Stock() {
       </div>
 
       {/* 4. INVENTORY MANIFEST TABLE */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h3 className="text-base font-bold text-slate-900">Active Node Manifest</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Active Node Manifest</h3>
             <p className="text-xs text-slate-400">Live hardware inventory grid inspection</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
             {/* Filter Tabs */}
-            <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
-              <button 
+            <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+              <button
                 onClick={() => setActiveTab('all')}
-                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${activeTab === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${activeTab === 'all' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}
               >
                 All
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('optimal')}
-                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${activeTab === 'optimal' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${activeTab === 'optimal' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}
               >
                 Optimal
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('low')}
-                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${activeTab === 'low' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${activeTab === 'low' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'}`}
               >
                 Alerts
               </button>
@@ -228,12 +232,12 @@ export default function Stock() {
               <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                 <Search size={14} />
               </span>
-              <input 
-                type="text" 
-                placeholder="Search SKU..." 
+              <input
+                type="text"
+                placeholder="Search SKU..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
@@ -242,7 +246,7 @@ export default function Stock() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+              <tr className="bg-slate-50 dark:bg-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
                 <th className="py-3 px-6">SKU Identifier</th>
                 <th className="py-3 px-6">Hardware Name</th>
                 <th className="py-3 px-6">Category</th>
@@ -252,25 +256,25 @@ export default function Stock() {
                 <th className="py-3 px-6 text-right">Telemetry Ping</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-xs">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
               {filteredItems.map((item, idx) => (
-                <tr key={idx} className={`transition-all duration-300 hover:bg-slate-50/80 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-                  <td className="py-4 px-6 font-mono font-bold text-blue-600">{item.sku}</td>
-                  <td className="py-4 px-6 font-bold text-slate-900">{item.name}</td>
-                  <td className="py-4 px-6 text-slate-500 font-medium">{item.category}</td>
-                  <td className="py-4 px-6 font-mono font-extrabold text-slate-900">{item.stock}</td>
+                <tr key={idx} className={`transition-all duration-300 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                  <td className="py-4 px-6 font-mono font-bold text-blue-600 dark:text-blue-400">{item.sku}</td>
+                  <td className="py-4 px-6 font-bold text-slate-900 dark:text-white">{item.name}</td>
+                  <td className="py-4 px-6 text-slate-500 dark:text-slate-400 font-medium">{item.category}</td>
+                  <td className="py-4 px-6 font-mono font-extrabold text-slate-900 dark:text-white">{item.stock}</td>
                   <td className="py-4 px-6">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                      item.status === 'Optimal' 
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' 
-                        : item.status === 'Critical Low' 
-                        ? 'bg-amber-50 text-amber-700 border border-amber-100 animate-pulse'
-                        : 'bg-rose-50 text-rose-700 border border-rose-100'
+                      item.status === 'Optimal'
+                        ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900'
+                        : item.status === 'Critical Low'
+                        ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-900 animate-pulse'
+                        : 'bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border border-rose-100 dark:border-rose-900'
                     }`}>
                       {item.status}
                     </span>
                   </td>
-                  <td className="py-4 px-6 text-slate-600 font-medium">{item.zone}</td>
+                  <td className="py-4 px-6 text-slate-600 dark:text-slate-300 font-medium">{item.zone}</td>
                   <td className="py-4 px-6 text-right font-mono text-slate-400 text-[11px]">{item.updated}</td>
                 </tr>
               ))}
