@@ -1,4 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
+import { ProtectedLayout } from './features/navagation/ProtectedLayout';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import VerifyOtp from './pages/VerifyOtp';
 import Ecommerce from './pages/Ecommerce';
 import Analytics from './pages/Analytics';
 import Marketing from './pages/Marketing';
@@ -23,62 +27,67 @@ import Support from './pages/Support';
 import Email from './pages/Email';
 import Charts from './pages/Charts';
 import UiElements from './pages/UiElements';
-import Auth from './pages/Auth';
 
 export const AppRoutes = () => {
  return (
     <Routes>
-      <Route path="/" element={<Ecommerce />} />
+      {/* Public auth routes — no sidebar/header */}
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/otp" element={<VerifyOtp />} />
 
-      <Route path="/ecommerce" element={<Ecommerce />} />
+      {/* Protected app routes — require a signed-in session */}
+      <Route element={<ProtectedLayout />}>
+        <Route path="/" element={<Ecommerce />} />
 
-      <Route path="/analytics" element={<Analytics />} />
+        <Route path="/ecommerce" element={<Ecommerce />} />
 
-      <Route path="/marketing" element={<Marketing />} />
+        <Route path="/analytics" element={<Analytics />} />
 
-      <Route path="/stocks" element={<Stock />} />
+        <Route path="/marketing" element={<Marketing />} />
 
-      <Route path="/crm" element={<Crm />} />
+        <Route path="/stocks" element={<Stock />} />
 
-      <Route path="/saas" element={<SaaS />} />
+        <Route path="/crm" element={<Crm />} />
 
-      <Route path="/logistics" element={<Logistics />} />
+        <Route path="/saas" element={<SaaS />} />
 
-      <Route path="/ai" element={<Ai />} />
+        <Route path="/logistics" element={<Logistics />} />
 
-      <Route path="/sales" element={<Sales />} />
+        <Route path="/ai" element={<Ai />} />
 
-      <Route path="/finance" element={<Finance />} />
+        <Route path="/sales" element={<Sales />} />
 
-      <Route path="/ai-assistant" element={<AiAssistant />} />
+        <Route path="/finance" element={<Finance />} />
 
-      <Route path="/ecommerce-main" element={<EcommerceMain />} />
+        <Route path="/ai-assistant" element={<AiAssistant />} />
 
-      <Route path="/calendar" element={<Calendar />} />
+        <Route path="/ecommerce-main" element={<EcommerceMain />} />
 
-      <Route path="/profile" element={<Profile />} />
+        <Route path="/calendar" element={<Calendar />} />
 
-      <Route path="/tasks" element={<Tasks />} />
+        <Route path="/profile" element={<Profile />} />
 
-      <Route path="/forms" element={<Forms />} />
+        <Route path="/tasks" element={<Tasks />} />
 
-      <Route path="/tables" element={<Tables />} />
+        <Route path="/forms" element={<Forms />} />
 
-      <Route path="/pages" element={<Pages />} />
+        <Route path="/tables" element={<Tables />} />
 
-      <Route path="/layouts" element={<Layouts />} />
+        <Route path="/pages" element={<Pages />} />
 
-      <Route path="/chat" element={<Chat />} />
+        <Route path="/layouts" element={<Layouts />} />
 
-      <Route path="/support" element={<Support />} />
+        <Route path="/chat" element={<Chat />} />
 
-      <Route path="/email" element={<Email />} />
+        <Route path="/support" element={<Support />} />
 
-      <Route path="/charts" element={<Charts />} />
+        <Route path="/email" element={<Email />} />
 
-      <Route path="/ui-elements" element={<UiElements />} />
+        <Route path="/charts" element={<Charts />} />
 
-      <Route path="/auth" element={<Auth />} />
+        <Route path="/ui-elements" element={<UiElements />} />
+      </Route>
     </Routes>
   );
 };

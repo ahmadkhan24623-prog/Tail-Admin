@@ -1,17 +1,17 @@
 // src/App.tsx
 import { BrowserRouter } from 'react-router-dom';
-import { DashboardLayout } from './features/navagation/DashboardLayout';
 import { AppRoutes } from './AppRoutes';
 import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <DashboardLayout>
+      <AuthProvider>
+        <BrowserRouter>
           <AppRoutes />
-        </DashboardLayout>
-      </BrowserRouter>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

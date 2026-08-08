@@ -85,7 +85,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             {sidebarExpanded && <h3 className="mb-2 ml-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase">Others</h3>}
             <NavLink to="/charts" className={({isActive}) => isActive ? "bg-blue-50 dark:bg-blue-900/30 block rounded-lg" : ""}><SidebarItem icon={<PieChart size={20} />} label="Charts" expanded={sidebarExpanded} /></NavLink>
             <NavLink to="/ui-elements" className={({isActive}) => isActive ? "bg-blue-50 dark:bg-blue-900/30 block rounded-lg" : ""}><SidebarItem icon={<Box size={20} />} label="UI Elements" expanded={sidebarExpanded} /></NavLink>
-            <NavLink to="/auth" className={({isActive}) => isActive ? "bg-blue-50 dark:bg-blue-900/30 block rounded-lg" : ""}><SidebarItem icon={<Lock size={20} />} label="Authentication" expanded={sidebarExpanded} /></NavLink>
+            <NavLink to="/signin" className={({isActive}) => isActive ? "bg-blue-50 dark:bg-blue-900/30 block rounded-lg" : ""}><SidebarItem icon={<Lock size={20} />} label="Authentication" expanded={sidebarExpanded} /></NavLink>
           </div>
         </nav>
 

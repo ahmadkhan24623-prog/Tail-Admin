@@ -1,11 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Bell, Moon, Sun, Menu, ChevronDown, User, Settings, LogOut, HelpCircle } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
+import { useAuth } from '../../../context/AuthContext';
 
 export function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    setDropdownOpen(false);
+    logout();
+    navigate('/signin', { replace: true });
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -67,25 +77,27 @@ export function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
               className="flex items-center gap-3 pl-4 border-l border-gray-200 dark:border-gray-700"
             >
               <div className="text-right hidden sm:block">
-                <span className="block text-sm font-medium text-black dark:text-white">Musharof</span>
+                <span className="block text-sm font-medium text-black dark:text-white">{(user?.name || 'User').split(' ')[0]}</span>
               </div>
-              <img src="/images/owner.png" className="h-10 w-10 rounded-full" alt="User" />
+              <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-400">
+                {(user?.name || 'U').charAt(0).toUpperCase()}
+              </div>
               <ChevronDown size={16} className={`text-gray-600 dark:text-gray-300 ${dropdownOpen ? 'rotate-180' : ''} transition-transform`} />
             </button>
 
             {dropdownOpen && (
               <div className="absolute right-0 mt-4 w-60 rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg p-3 z-50">
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-                  <span className="block text-sm font-semibold text-black dark:text-white">Musharof Chowdhury</span>
-                  <span className="block text-xs text-gray-500 dark:text-gray-400">randomuser@pimjo.com</span>
+                  <span className="block text-sm font-semibold text-black dark:text-white">{user?.name || 'User'}</span>
+                  <span className="block text-xs text-gray-500 dark:text-gray-400">{user?.email || ''}</span>
                 </div>
                 <ul className="flex flex-col gap-1 py-2">
-                  <DropdownItem icon={<User size={18} />} label="Edit profile" />
-                  <DropdownItem icon={<Settings size={18} />} label="Account settings" />
-                  <DropdownItem icon={<HelpCircle size={18} />} label="Support" />
+                  <DropdownItem icon={<User size={18} />} label="Edit profile" onClick={() => { setDropdownOpen(false); navigate('/profile'); }} />
+                  <DropdownItem icon={<Settings size={18} />} label="Account settings" onClick={() => { setDropdownOpen(false); navigate('/profile'); }} />
+                  <DropdownItem icon={<HelpCircle size={18} />} label="Support" onClick={() => { setDropdownOpen(false); navigate('/support'); }} />
                 </ul>
                 <div className="border-t border-gray-100 dark:border-gray-700 pt-2 mt-2">
-                  <DropdownItem icon={<LogOut size={18} />} label="Sign out" className="text-red-500" />
+                  <DropdownItem icon={<LogOut size={18} />} label="Sign out" className="text-red-500" onClick={handleSignOut} />
                 </div>
               </div>
             )}
@@ -96,9 +108,9 @@ export function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
   );
 }
 
-function DropdownItem({ icon, label, className = "" }: { icon: React.ReactNode, label: string, className?: string }) {
+function DropdownItem({ icon, label, className = "", onClick }: { icon: React.ReactNode, label: string, className?: string, onClick?: () => void }) {
   return (
-    <li className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer text-gray-600 dark:text-gray-300 ${className}`}>
+    <li onClick={onClick} className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer text-gray-600 dark:text-gray-300 ${className}`}>
       {icon}
       <span className="text-sm">{label}</span>
     </li>
