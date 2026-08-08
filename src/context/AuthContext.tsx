@@ -128,7 +128,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser((prev) => {
       if (!prev) return prev;
       const next = { ...prev, ...updates };
-      const { name: _name, email: _email, ...profile } = next;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { name, email, ...profile } = next;
       saveProfileFor(next.email, profile as Profile);
       return next;
     });
@@ -153,6 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');

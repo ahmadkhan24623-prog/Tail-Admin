@@ -5,6 +5,7 @@ import {
   PieChart, Pie, Cell
 } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
+import { useToast } from '../context/ToastContext';
 
 // Data sets for different timeframe filters
 const analyticsDataSets: Record<string, { name: string; visitors: number; pageViews: number }[]> = {
@@ -49,6 +50,7 @@ export default function Analytics() {
   const [timeframe, setTimeframe] = useState<'7D' | '30D' | '12M'>('30D');
   const [animateBars, setAnimateBars] = useState(false);
   const { theme } = useTheme();
+  const { showToast } = useToast();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
   const tickFill = isDark ? '#6b7280' : '#9ca3af';
@@ -151,7 +153,7 @@ export default function Analytics() {
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Top Traffic Sources</h3>
               <p className="text-sm text-gray-400">Where your users are coming from</p>
             </div>
-            <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
+            <button onClick={() => showToast('Traffic source export is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>
           </div>
 
           <div className="space-y-5 my-auto">
@@ -178,7 +180,7 @@ export default function Analytics() {
 
           <div className="border-t border-gray-100 dark:border-gray-800 pt-4 mt-6 flex justify-between items-center text-xs text-gray-400">
             <span>Updated 5 minutes ago</span>
-            <button className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">View Detailed Report →</button>
+            <button onClick={() => showToast('Full analytics report is not available in this demo yet.', 'info')} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">View Detailed Report →</button>
           </div>
         </div>
 
@@ -189,7 +191,7 @@ export default function Analytics() {
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Device Analytics</h3>
               <p className="text-sm text-gray-400">Traffic split by device type</p>
             </div>
-            <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
+            <button onClick={() => showToast('Device breakdown export is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>
           </div>
 
           <div className="h-48 relative flex items-center justify-center">

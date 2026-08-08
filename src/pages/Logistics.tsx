@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { PageHeader } from '../components/ui/PageHeader';
 import { StatCard } from '../components/ui/StatCard';
 import { Card, CardHeader } from '../components/ui/Card';
+import { useToast } from '../context/ToastContext';
 
 const deliveryTrend = [
   { name: 'Mon', onTime: 92 }, { name: 'Tue', onTime: 88 }, { name: 'Wed', onTime: 95 },
@@ -25,6 +26,7 @@ const statusColor: Record<string, string> = {
 };
 
 export default function Logistics() {
+  const { showToast } = useToast();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
@@ -48,7 +50,7 @@ export default function Logistics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2 p-6">
-          <CardHeader title="On-Time Delivery Rate" subtitle="Percentage of shipments delivered on schedule" action={<MoreVertical size={20} className="text-gray-400 cursor-pointer" />} />
+          <CardHeader title="On-Time Delivery Rate" subtitle="Percentage of shipments delivered on schedule" action={<button onClick={() => showToast('Chart export is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>} />
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={deliveryTrend}>

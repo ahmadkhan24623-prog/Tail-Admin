@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { PageHeader } from '../components/ui/PageHeader';
 import { StatCard } from '../components/ui/StatCard';
 import { Card, CardHeader } from '../components/ui/Card';
+import { useToast } from '../context/ToastContext';
 
 const salesByRep = [
   { name: 'A. Lopez', sales: 82 }, { name: 'B. Chen', sales: 65 }, { name: 'C. Reed', sales: 91 },
@@ -18,6 +19,7 @@ const topDeals = [
 ];
 
 export default function Sales() {
+  const { showToast } = useToast();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
@@ -40,7 +42,7 @@ export default function Sales() {
       </div>
 
       <Card className="p-6">
-        <CardHeader title="Sales by Rep" subtitle="Units sold this month, by representative" action={<MoreVertical size={20} className="text-gray-400 cursor-pointer" />} />
+        <CardHeader title="Sales by Rep" subtitle="Units sold this month, by representative" action={<button onClick={() => showToast('Chart export is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>} />
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={salesByRep}>

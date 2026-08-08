@@ -1,19 +1,22 @@
 import { Check, Info, AlertTriangle, XCircle, Bell } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Card, CardHeader } from '../components/ui/Card';
+import { useToast } from '../context/ToastContext';
 
 export default function UiElements() {
+  const { showToast } = useToast();
+
   return (
     <div className="p-4 md:p-6 space-y-6">
       <PageHeader title="UI Elements" subtitle="Core building blocks — buttons, badges, alerts, and avatars." />
 
       <Card className="p-6">
-        <CardHeader title="Buttons" />
+        <CardHeader title="Buttons" subtitle="Click any variant to preview its action feedback" />
         <div className="flex flex-wrap gap-3">
-          <button className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors cursor-pointer">Primary</button>
-          <button className="px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-semibold transition-colors cursor-pointer">Secondary</button>
-          <button className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-semibold transition-colors cursor-pointer">Outline</button>
-          <button className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-colors cursor-pointer">Danger</button>
+          <button onClick={() => showToast('Primary action triggered')} className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors cursor-pointer">Primary</button>
+          <button onClick={() => showToast('Secondary action triggered', 'info')} className="px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-semibold transition-colors cursor-pointer">Secondary</button>
+          <button onClick={() => showToast('Outline action triggered', 'info')} className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-semibold transition-colors cursor-pointer">Outline</button>
+          <button onClick={() => showToast('Danger action triggered', 'info')} className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-colors cursor-pointer">Danger</button>
           <button disabled className="px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-400 text-sm font-semibold cursor-not-allowed">Disabled</button>
         </div>
       </Card>
@@ -62,7 +65,7 @@ export default function UiElements() {
             ))}
             <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs font-bold text-gray-500">+5</div>
           </div>
-          <button className="relative p-3 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
+          <button onClick={() => showToast('You have 3 unread notifications', 'info')} className="relative p-3 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer">
             <Bell size={18} />
             <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500"></span>
           </button>

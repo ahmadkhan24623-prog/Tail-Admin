@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { PageHeader } from '../components/ui/PageHeader';
 import { StatCard } from '../components/ui/StatCard';
 import { Card, CardHeader } from '../components/ui/Card';
+import { useToast } from '../context/ToastContext';
 
 const usageTrend = [
   { name: '00:00', tokens: 12 }, { name: '04:00', tokens: 8 }, { name: '08:00', tokens: 34 },
@@ -17,6 +18,7 @@ const models = [
 ];
 
 export default function Ai() {
+  const { showToast } = useToast();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
@@ -40,7 +42,7 @@ export default function Ai() {
       </div>
 
       <Card className="p-6">
-        <CardHeader title="Token Usage (24h)" subtitle="Hourly token consumption across all models" action={<MoreVertical size={20} className="text-gray-400 cursor-pointer" />} />
+        <CardHeader title="Token Usage (24h)" subtitle="Hourly token consumption across all models" action={<button onClick={() => showToast('Usage export is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>} />
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={usageTrend}>

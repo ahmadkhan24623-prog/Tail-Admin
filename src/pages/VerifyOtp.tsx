@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, ArrowRight, AlertCircle, Info, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { AuthLayout } from '../components/auth/AuthLayout';
+import { AuthCard } from '../components/auth/AuthCard';
 
 const RESEND_SECONDS = 30;
 
@@ -83,35 +85,42 @@ export default function VerifyOtp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-950">
-      <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm p-8">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-blue-600 flex items-center justify-center text-white mb-4">
-            <ShieldCheck size={22} />
-          </div>
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Verify your email</h2>
-          <p className="text-sm text-gray-400 mt-1">
-            Enter the 6-digit code we sent to <span className="font-semibold text-gray-600 dark:text-gray-300">{pendingEmail}</span>
+    <AuthLayout>
+      <AuthCard
+        icon={<ShieldCheck size={22} />}
+        title="Verify your email"
+        subtitle={<>Enter the 6-digit code we sent to <span className="font-semibold text-gray-600 dark:text-gray-300">{pendingEmail}</span></>}
+        footer={
+          <p className="text-sm text-gray-400">
+            Didn't receive the code?{' '}
+            {cooldown > 0 ? (
+              <span className="text-gray-400">Resend in {cooldown}s</span>
+            ) : (
+              <button onClick={handleResend} className="text-blue-600 dark:text-blue-400 font-semibold hover:underline cursor-pointer">Resend code</button>
+            )}
           </p>
-        </div>
-
-        <div className="mb-4 px-4 py-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900 text-blue-600 dark:text-blue-400 text-xs">
+        }
+      >
+        <div className="mb-5 flex items-start gap-2.5 px-4 py-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900 text-blue-600 dark:text-blue-400 text-xs leading-relaxed">
+          <Info size={15} className="shrink-0 mt-0.5" />
           Demo mode: no email is actually sent — check the browser console for your verification code.
         </div>
 
         {notice && (
-          <div className="mb-4 px-4 py-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900 text-green-600 dark:text-green-400 text-sm">
+          <div className="mb-5 flex items-start gap-2.5 px-4 py-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900 text-green-600 dark:text-green-400 text-sm">
+            <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
             {notice}
           </div>
         )}
         {error && (
-          <div className="mb-4 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900 text-red-600 dark:text-red-400 text-sm">
+          <div className="mb-5 flex items-start gap-2.5 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900 text-red-600 dark:text-red-400 text-sm">
+            <AlertCircle size={16} className="shrink-0 mt-0.5" />
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex justify-between gap-2">
+        <form onSubmit={handleSubmit} className="space-y-7">
+          <div className="flex justify-between gap-2 sm:gap-3">
             {digits.map((d, i) => (
               <input
                 key={i}
@@ -122,25 +131,22 @@ export default function VerifyOtp() {
                 onPaste={handlePaste}
                 inputMode="numeric"
                 maxLength={1}
-                className="w-11 h-12 text-center text-lg font-bold bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-800 dark:text-gray-100 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-800 dark:text-gray-100 outline-none focus:bg-white dark:focus:bg-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
               />
             ))}
           </div>
 
-          <button type="submit" disabled={submitting} className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold transition-colors cursor-pointer">
-            {submitting ? 'Verifying...' : 'Verify Code'}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold transition-all shadow-lg shadow-blue-600/25 hover:shadow-blue-600/35 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2"
+          >
+            {submitting ? 'Verifying...' : (
+              <>Verify Code <ArrowRight size={16} /></>
+            )}
           </button>
         </form>
-
-        <p className="text-center text-sm text-gray-400 mt-6">
-          Didn't receive the code?{' '}
-          {cooldown > 0 ? (
-            <span className="text-gray-400">Resend in {cooldown}s</span>
-          ) : (
-            <button onClick={handleResend} className="text-blue-600 dark:text-blue-400 font-semibold hover:underline cursor-pointer">Resend code</button>
-          )}
-        </p>
-      </div>
-    </div>
+      </AuthCard>
+    </AuthLayout>
   );
 }

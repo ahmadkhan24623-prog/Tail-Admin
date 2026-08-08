@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { PageHeader } from '../components/ui/PageHeader';
 import { StatCard } from '../components/ui/StatCard';
 import { Card, CardHeader } from '../components/ui/Card';
+import { useToast } from '../context/ToastContext';
 
 const cashFlow = [
   { name: 'Jan', income: 62, expense: 40 }, { name: 'Feb', income: 58, expense: 44 },
@@ -20,6 +21,7 @@ const transactions = [
 ];
 
 export default function Finance() {
+  const { showToast } = useToast();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
@@ -42,7 +44,7 @@ export default function Finance() {
       </div>
 
       <Card className="p-6">
-        <CardHeader title="Cash Flow" subtitle="Income vs expenses over the last 6 months" action={<MoreVertical size={20} className="text-gray-400 cursor-pointer" />} />
+        <CardHeader title="Cash Flow" subtitle="Income vs expenses over the last 6 months" action={<button onClick={() => showToast('Chart export is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>} />
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={cashFlow}>

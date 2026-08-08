@@ -4,6 +4,8 @@ import {
   BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
+import { useToast } from '../context/ToastContext';
+import { useNavigate } from 'react-router-dom';
 
 // Data sets for Monthly, Quarterly, and Annually views
 const chartDataSets: Record<string, { name: string; sales: number; revenue: number }[]> = {
@@ -40,6 +42,8 @@ const transactionsData = [
 
 export default function Ecommerce() {
   const [activeTab, setActiveTab] = useState<'Monthly' | 'Quarterly' | 'Annually'>('Monthly');
+  const { showToast } = useToast();
+  const navigate = useNavigate();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
@@ -79,7 +83,7 @@ export default function Ecommerce() {
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Monthly Target</h3>
               <p className="text-sm text-gray-400">Target you've set for each month</p>
             </div>
-            <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
+            <button onClick={() => showToast('Target settings are not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>
           </div>
           <div className="relative flex justify-center py-4 ">
             <svg className="w-full max-w-[200px] h-auto mb-12" viewBox="0 0 200 100">
@@ -148,7 +152,7 @@ export default function Ecommerce() {
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Customers Demographic</h3>
               <p className="text-sm text-gray-400">Number of customer based on country</p>
             </div>
-            <MoreVertical size={20} className="text-gray-400 cursor-pointer" />
+            <button onClick={() => showToast('Full demographics view is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>
           </div>
           <div className="bg-gray-50 dark:bg-gray-800 rounded-xl h-48 mb-6 flex items-center justify-center border border-dashed border-gray-200 dark:border-gray-700">
             <span className="text-gray-400 text-sm">Map Placeholder</span>
@@ -177,8 +181,8 @@ export default function Ecommerce() {
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Recent Orders</h3>
             <div className="flex gap-2">
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"><Filter size={16} /> Filter</button>
-              <button className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">See all</button>
+              <button onClick={() => showToast('Order filters are not available in this demo yet.', 'info')} className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"><Filter size={16} /> Filter</button>
+              <button onClick={() => navigate('/ecommerce-main')} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">See all</button>
             </div>
           </div>
           <div className="space-y-6">

@@ -5,6 +5,7 @@ import {
   PieChart, Pie, Cell
 } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
+import { useToast } from '../context/ToastContext';
 
 const marketingBarData = [
   { name: 'Mon', spend: 300, roi: 3.2 },
@@ -25,6 +26,7 @@ const channelShareData = [
 
 export default function Marketing() {
   const [animateCards, setAnimateCards] = useState(false);
+  const { showToast } = useToast();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
@@ -50,7 +52,7 @@ export default function Marketing() {
           <h2 className="text-2xl font-extrabold tracking-tight">Marketing Command Center</h2>
           <p className="text-blue-100 text-sm mt-1 max-w-xl">Manage active ad sets, track real-time conversion metrics, and optimize hyper-targeted campaign ROI effortlessly.</p>
         </div>
-        <button className="relative z-10 bg-white text-blue-600 px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 cursor-pointer">
+        <button onClick={() => showToast('Campaign builder is not available in this demo yet.', 'info')} className="relative z-10 bg-white text-blue-600 px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 cursor-pointer">
           <Plus size={16} /> Create Campaign
         </button>
       </div>
@@ -112,7 +114,7 @@ export default function Marketing() {
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 tracking-tight">Daily Ad Spend vs Return</h3>
               <p className="text-sm text-gray-400">Comparing capital allocation against daily ROI</p>
             </div>
-            <button className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
+            <button onClick={() => showToast('Chart export is not available in this demo yet.', 'info')} className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
               <MoreVertical size={20} />
             </button>
           </div>
@@ -140,7 +142,7 @@ export default function Marketing() {
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 tracking-tight">Channel Spend Share</h3>
               <p className="text-sm text-gray-400">Budget distribution</p>
             </div>
-            <button className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
+            <button onClick={() => showToast('Channel breakdown export is not available in this demo yet.', 'info')} className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
               <MoreVertical size={20} />
             </button>
           </div>

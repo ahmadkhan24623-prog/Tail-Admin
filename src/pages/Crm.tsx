@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Users, Handshake, PhoneCall, TrendingUp, MoreVertical, Plus } from 'lucide-react';
+import { Users, Handshake, PhoneCall, TrendingUp, MoreVertical, Plus, X } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 import { PageHeader } from '../components/ui/PageHeader';
 import { StatCard } from '../components/ui/StatCard';
 import { Card, CardHeader } from '../components/ui/Card';
+import { useToast } from '../context/ToastContext';
 
 const pipelineTrend = [
   { name: 'Mon', deals: 12 }, { name: 'Tue', deals: 19 }, { name: 'Wed', deals: 14 },
@@ -18,13 +19,15 @@ const stageData = [
   { name: 'Won', value: 18, color: '#1d4ed8' },
 ];
 
-const deals = [
+const INITIAL_DEALS = [
   { company: 'Nimbus Retail Co.', contact: 'Sarah Klein', stage: 'Proposal', value: '$24,500', prob: 70 },
   { company: 'Vertex Logistics', contact: 'Omar Haddad', stage: 'Qualified', value: '$12,900', prob: 45 },
   { company: 'Bluepeak Studio', contact: 'Mina Cho', stage: 'Won', value: '$38,200', prob: 100 },
   { company: 'Harborline Foods', contact: 'Jake Turner', stage: 'Lead', value: '$6,400', prob: 15 },
   { company: 'Solace Health', contact: 'Priya Nair', stage: 'Proposal', value: '$19,750', prob: 65 },
 ];
+
+const STAGE_PROB: Record<string, number> = { Lead: 15, Qualified: 45, Proposal: 65, Won: 100 };
 
 const stageColor: Record<string, string> = {
   Lead: 'text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800',
@@ -34,11 +37,33 @@ const stageColor: Record<string, string> = {
 };
 
 export default function Crm() {
+  const { showToast } = useToast();
   const [range, setRange] = useState<'7d' | '30d'>('7d');
+  const [deals, setDeals] = useState(INITIAL_DEALS);
+  const [open, setOpen] = useState(false);
+  const [company, setCompany] = useState('');
+  const [contact, setContact] = useState('');
+  const [stage, setStage] = useState('Lead');
+  const [value, setValue] = useState('');
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const gridStroke = isDark ? '#1f2937' : '#f3f4f6';
   const tickFill = isDark ? '#6b7280' : '#9ca3af';
+
+  const createDeal = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!company.trim() || !contact.trim()) return;
+    setDeals((prev) => [
+      { company: company.trim(), contact: contact.trim(), stage, value: value.trim() ? `$${value.trim()}` : '$0', prob: STAGE_PROB[stage] },
+      ...prev,
+    ]);
+    showToast(`Deal added for ${company.trim()}`);
+    setCompany('');
+    setContact('');
+    setStage('Lead');
+    setValue('');
+    setOpen(false);
+  };
 
   return (
     <div className="p-4 md:p-6 space-y-6">
@@ -47,7 +72,7 @@ export default function Crm() {
         title="CRM Overview"
         subtitle="Track your pipeline, follow up on leads, and close more deals faster."
         action={
-          <button className="bg-white text-blue-600 px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md hover:bg-blue-50 transition-all flex items-center gap-2 cursor-pointer">
+          <button onClick={() => setOpen(true)} className="bg-white text-blue-600 px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md hover:bg-blue-50 transition-all flex items-center gap-2 cursor-pointer">
             <Plus size={16} /> New Deal
           </button>
         }
@@ -87,7 +112,7 @@ export default function Crm() {
         </Card>
 
         <Card className="p-6">
-          <CardHeader title="Pipeline by Stage" action={<MoreVertical size={20} className="text-gray-400 cursor-pointer" />} />
+          <CardHeader title="Pipeline by Stage" action={<button onClick={() => showToast('Pipeline export is not available in this demo yet.', 'info')} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><MoreVertical size={20} /></button>} />
           <div className="h-40">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -143,6 +168,45 @@ export default function Crm() {
           </table>
         </div>
       </Card>
+
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => setOpen(false)}>
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-bold text-gray-800 dark:text-gray-100">New Deal</h3>
+              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><X size={18} /></button>
+            </div>
+            <form onSubmit={createDeal} className="space-y-4">
+              <div>
+                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Company</label>
+                <input autoFocus value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Acme Corp" className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors" />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Contact</label>
+                <input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="Jane Smith" className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Stage</label>
+                  <select value={stage} onChange={(e) => setStage(e.target.value)} className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-800 dark:text-gray-100 focus:outline-none focus:border-blue-500 transition-colors">
+                    <option>Lead</option>
+                    <option>Qualified</option>
+                    <option>Proposal</option>
+                    <option>Won</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Value ($)</label>
+                  <input value={value} onChange={(e) => setValue(e.target.value)} placeholder="10,000" className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors" />
+                </div>
+              </div>
+              <button type="submit" disabled={!company.trim() || !contact.trim()} className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors cursor-pointer">
+                Add Deal
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
