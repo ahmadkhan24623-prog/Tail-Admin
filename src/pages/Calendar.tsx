@@ -21,7 +21,7 @@ export default function Calendar() {
 
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells = Array.from({ length: firstDay }, () => null).concat(
+  const cells: (number | null)[] = Array.from({ length: firstDay }, (): number | null => null).concat(
     Array.from({ length: daysInMonth }, (_, i) => i + 1)
   );
 
