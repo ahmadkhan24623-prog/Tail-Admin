@@ -1,6 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-interface AuthUser {
+interface Profile {
+  phone: string;
+  location: string;
+  role: string;
+  bio: string;
+  avatarUrl: string | null;
+}
+
+interface AuthUser extends Profile {
   name: string;
   email: string;
 }
@@ -20,15 +28,40 @@ interface AuthContextValue {
   verifyOtp: (code: string) => { ok: boolean; error?: string };
   resendOtp: () => string | null;
   logout: () => void;
+  updateProfile: (updates: Partial<Omit<AuthUser, 'email'>>) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const USER_KEY = 'auth_user';
 const PENDING_KEY = 'auth_pending_signup';
+const PROFILES_KEY = 'auth_profiles';
+
+const DEFAULT_PROFILE: Profile = { phone: '', location: '', role: 'Member', bio: '', avatarUrl: null };
 
 function generateOtp() {
   return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function getStoredProfiles(): Record<string, Profile> {
+  try {
+    return JSON.parse(localStorage.getItem(PROFILES_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveProfileFor(email: string, profile: Profile) {
+  const all = getStoredProfiles();
+  all[email] = profile;
+  localStorage.setItem(PROFILES_KEY, JSON.stringify(all));
+}
+
+function buildUser(name: string, email: string): AuthUser {
+  const stored = getStoredProfiles()[email];
+  const profile = stored || { ...DEFAULT_PROFILE };
+  if (!stored) saveProfileFor(email, profile);
+  return { name, email, ...profile };
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -55,7 +88,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login: AuthContextValue['login'] = (email, password) => {
     if (!email || !password) return { ok: false, error: 'Enter your email and password.' };
     if (password.length < 6) return { ok: false, error: 'Incorrect email or password.' };
-    setUser({ name: email.split('@')[0].replace(/[._]/g, ' '), email });
+    const name = email.split('@')[0].replace(/[._]/g, ' ');
+    setUser(buildUser(name, email));
     return { ok: true };
   };
 
@@ -72,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const verifyOtp: AuthContextValue['verifyOtp'] = (code) => {
     if (!pending) return { ok: false, error: 'No signup in progress. Please sign up again.' };
     if (code !== pending.otp) return { ok: false, error: 'Invalid code. Please try again.' };
-    setUser({ name: pending.name, email: pending.email });
+    setUser(buildUser(pending.name, pending.email));
     setPending(null);
     return { ok: true };
   };
@@ -90,6 +124,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  const updateProfile: AuthContextValue['updateProfile'] = (updates) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...updates };
+      const { name: _name, email: _email, ...profile } = next;
+      saveProfileFor(next.email, profile as Profile);
+      return next;
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -101,6 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         verifyOtp,
         resendOtp,
         logout,
+        updateProfile,
       }}
     >
       {children}
